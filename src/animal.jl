@@ -13,8 +13,8 @@ end
 
 # get the per species defaults back
 randsex() = rand(Bool) ? Female : Male
-Sheep(id; E=4.0, ΔE=0.2, pr=0.6, pf=0.6, S=randsex()) = Sheep(id, E, ΔE, pr, pf, S)
-Wolf(id; E=10.0, ΔE=8.0, pr=0.1, pf=0.2, S=randsex()) = Wolf(id, E, ΔE, pr, pf, S)
+Sheep(id; E=4.0, ΔE=0.2, pr=0.5, pf=0.9, S=randsex()) = Sheep(id, E, ΔE, pr, pf, S)
+Wolf(id; E=10.0, ΔE=4.0, pr=0.1, pf=0.20, S=randsex()) = Wolf(id, E, ΔE, pr, pf, S)
 
 function Base.show(io::IO, a::Animal{A,S}) where {A<:AnimalSpecies,S<:Sex}
     e = a.energy
@@ -44,10 +44,10 @@ eat!(::Animal, ::Nothing, ::World) = nothing
 
 
 function find_agent(::Type{A}, w::World) where A<:AnimalSpecies
-    df = get(w.agents, tosym(Animal{A,Female}), Animal{A,Female}[])
+    df = get(w.agents, tosym(Animal{A,Female}), Dict{Int,Animal{A,Female}}())
     af = df |> values |> collect
 
-    dm = get(w.agents, tosym(Animal{A,Male}), Animal{A,Male}[])
+    dm = get(w.agents, tosym(Animal{A,Male}), Dict{Int,Animal{A,Male}}())
     am = dm |> values |> collect
 
     nf = length(af)
@@ -60,7 +60,7 @@ function find_agent(::Type{A}, w::World) where A<:AnimalSpecies
         isempty(af) ? nothing : sample(af)
     else
         # both -> sample uniformly from one or the other
-        rand() < nf/(nf+nm) ? sample(am) : sample(af)
+        rand() < nm/(nf+nm) ? sample(am) : sample(af)
     end
 end
 
@@ -74,12 +74,13 @@ function reproduce!(a::Animal{A,S}, w::World) where {A,S}
     m = find_mate(a,w)
     if !isnothing(m)
         a.energy = a.energy / 2
-        vals = [getproperty(a,n) for n in fieldnames(Animal) if n!=:id]
         new_id = w.max_id + 1
-        T = typeof(a)
-        ŝ = T(new_id, vals...)
-        getfield(w.agents, tosym(T))[ŝ.id] = ŝ
+        ŝ = Animal{A,S}(new_id, a.energy, a.Δenergy, a.reprprob, a.foodprob)
+        getfield(w.agents, tosym(ŝ))[ŝ.id] = ŝ
         w.max_id = new_id
+        return ŝ
+    else
+        nothing
     end
 end
 

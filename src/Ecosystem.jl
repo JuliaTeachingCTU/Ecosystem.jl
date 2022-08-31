@@ -1,6 +1,7 @@
 module Ecosystem
 
 using StatsBase
+using Random: shuffle
 
 export World
 export Species, PlantSpecies, AnimalSpecies, Grass, Sheep, Wolf
@@ -41,7 +42,13 @@ end
 
 # for accessing NamedTuple in World
 tosym(::T) where T<:Animal = tosym(T)
-tosym(::Type{<:Animal{A,S}}) where {A,S} = Symbol("$A$S")
-tosym(::Type{<:Plant{P}}) where P = Symbol("$P")
+
+# NOTE: needed for type stability
+# TODO: do this with meta programming
+tosym(::Type{Animal{Wolf,Female}}) = Symbol("WolfFemale")
+tosym(::Type{Animal{Wolf,Male}}) = Symbol("WolfMale")
+tosym(::Type{Animal{Sheep,Female}}) = Symbol("SheepFemale")
+tosym(::Type{Animal{Sheep,Male}}) = Symbol("SheepMale")
+tosym(::Type{Plant{Grass}}) = Symbol("Grass")
 
 end # module

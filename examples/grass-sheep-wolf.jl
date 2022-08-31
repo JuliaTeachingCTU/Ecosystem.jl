@@ -1,18 +1,27 @@
 using Ecosystem
 using Random
 using Plots
-Random.seed!(8)
+Random.seed!(4)
+
+function make_counter()
+    n = 0
+    counter() = n += 1
+end
 
 function create_world()
-    n_grass  = 3000
-    n_sheep  = 200
-    n_wolves = 1
+    n_grass  = 1_000
+    n_sheep  = 2
+    n_wolves = 2
 
-    gs = [Grass(id) for id in 1:n_grass];
-    ss = [Sheep(id) for id in n_grass+1:n_grass+n_sheep];
-    wm = [Wolf(id,S=Female) for id in n_grass+n_sheep+1:n_grass+n_sheep+n_wolves];
-    wf = [Wolf(id,S=Male) for id in n_grass+n_sheep+n_wolves+1:n_grass+n_sheep+n_wolves*2];
-    World(vcat(gs, ss, wm, wf))
+    nextid = make_counter()
+
+    World(vcat(
+        [Grass(nextid()) for _ in 1:n_grass],
+        [Sheep(nextid(),S=Male) for _ in 1:n_sheep],
+        [Sheep(nextid(),S=Female) for _ in 1:n_sheep],
+        #[Wolf(nextid(),S=Female) for _ in 1:n_wolves],
+        #[Wolf(nextid(),S=Male) for _ in 1:n_wolves],
+    ))
 end
 world = create_world();
 
@@ -47,5 +56,5 @@ N = 10
 world = create_world();
 @btime simulate!($world, $N)
 
-world = create_world();
-@profview simulate!(world, N)
+#world = create_world();
+#@profview simulate!(world, N)
