@@ -28,16 +28,12 @@ include("plant.jl")
 include("animal.jl")
 include("utils.jl")
 
-kill_agent!(a::Agent, w::World) = delete!(getfield(w.agents, tosym(typeof(a))), a.id)
+kill_agent!(a::Agent, w::World) = delete!(w.agents, a.id)
 
 function find_agent(::Type{A}, w::World) where A<:Agent
-    dict = get(w.agents, tosym(A), nothing)
-    if !isnothing(dict)
-        as = dict |> values |> collect
-        isempty(as) ? nothing : sample(as)
-    else
-        nothing
-    end
+    dict = filter(x -> isa(x,A), w.agents |> values |> collect)
+    as = dict |> values |> collect
+    isempty(as) ? nothing : sample(as)
 end
 
 # for accessing NamedTuple in World

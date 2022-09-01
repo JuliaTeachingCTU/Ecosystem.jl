@@ -64,8 +64,8 @@ function find_agent(::Type{A}, w::World) where A<:AnimalSpecies
     end
 end
 
-find_food(::Animal{<:Wolf}, w::World) = find_agent(Sheep, w)
-find_food(::Animal{<:Sheep}, w::World) = find_agent(Grass, w)
+find_food(::Animal{<:Wolf}, w::World) = find_agent(Animal{Sheep}, w)
+find_food(::Animal{<:Sheep}, w::World) = find_agent(Plant{Grass}, w)
 
 find_mate(::Animal{A,Female}, w::World) where A<:AnimalSpecies = find_agent(Animal{A,Male}, w)
 find_mate(::Animal{A,Male}, w::World) where A<:AnimalSpecies = find_agent(Animal{A,Female}, w)
@@ -76,7 +76,7 @@ function reproduce!(a::Animal{A,S}, w::World) where {A,S}
         a.energy = a.energy / 2
         new_id = w.max_id + 1
         ŝ = Animal{A,S}(new_id, a.energy, a.Δenergy, a.reprprob, a.foodprob)
-        getfield(w.agents, tosym(ŝ))[ŝ.id] = ŝ
+        w.agents[ŝ.id] = ŝ
         w.max_id = new_id
         return ŝ
     else
