@@ -12,3 +12,7 @@ Ecosystem.find_agent(Animal{Sheep}, w)
 
 @code_warntype find_food(w1, w)
 find_food(w1, w)
+
+sheep = Sheep(1)
+world = World(vcat([sheep], [Grass(i) for i=2:3000]))
+@code_warntype find_food(sheep, world)

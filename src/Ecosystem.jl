@@ -1,7 +1,7 @@
 module Ecosystem
 
 using StatsBase
-using Random: shuffle
+using Random: shuffle, randperm
 
 export World
 export Species, PlantSpecies, AnimalSpecies, Grass, Sheep, Wolf
@@ -27,7 +27,15 @@ include("utils.jl")
 kill_agent!(a::Agent, w::World) = delete!(w.agents, a.id)
 
 function find_agent(::Type{A}, w::World) where A<:Agent
-    as = filter(x -> isa(x,A), w.agents |> values |> collect)
+    as = w.agents |> values |> collect
+    #a = nothing
+    #for i in randperm(length(as))
+    #    if isa(as[i],A)
+    #        a = as[i]
+    #    end
+    #end
+    #return a
+    as = filter(x -> isa(x,A), as)
     isempty(as) ? nothing : sample(as)
 end
 
