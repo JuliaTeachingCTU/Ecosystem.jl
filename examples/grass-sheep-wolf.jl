@@ -32,11 +32,8 @@ for _ in 1:200
 end
 
 plt = plot()
-tolabel(::Type{Animal{Sheep}}) = "Sheep"
-tolabel(::Type{Animal{Wolf}}) = "Wolf"
-tolabel(::Type{Plant{Grass}}) = "Grass"
 for (A,c) in counts
-    plot!(plt, c, label=tolabel(A), lw=2)
+    plot!(plt, c, label="$A", lw=2)
 end
 display(plt)
 #error()

@@ -1,4 +1,4 @@
-mutable struct World{T<:NamedTuple}
+mutable struct World{T<:Dict{Int}}
     # this is a NamedTuple of Dict{Int,<:Agent}
     # but I don't know how to express that as a parametric type
     agents::T
@@ -6,16 +6,12 @@ mutable struct World{T<:NamedTuple}
 end
 
 function World(agents::Vector{<:Agent})
-    types = unique(typeof.(agents))
-    ags = map(types) do T
-        as = filter(x -> isa(x,T), agents)
-        Dict{Int,T}(a.id=>a for a in as)
-    end
-    nt = (; zip(tosym.(types), ags)...)
-    
     ids = [a.id for a in agents]
     length(unique(ids)) == length(agents) || error("Not all agents have unique IDs!")
-    World(nt, maximum(ids))
+
+    types = unique(typeof.(agents))
+    dict = Dict{Int,Union{types...}}(a.id => a for a in agents)
+    World(dict, maximum(ids))
 end
 
 function flat(w::World)
@@ -38,22 +34,17 @@ function world_step!(world::World)
     # this is faster but incorrect because species of same gender are treated
     # one after another - which means that e.g. all Animal{Sheep,Female} will
     # eat before all Animal{Sheep,Male} leaving less food for the latter
-    map(world.agents) do species
-        ids = copy(keys(species))
-        for id in ids
-            !haskey(species,id) && continue
-            a = species[id]
-            agent_step!(a, world)
-        end
+    ids = copy(keys(world.agents))
+    for id in ids
+        !haskey(world.agents,id) && continue
+        a = world.agents[id]
+        agent_step!(a, world)
     end
 end
 
 function Base.show(io::IO, w::World)
-    ts = join([valtype(a) for a in w.agents], ", ")
-    println(io, "World[$ts]")
-    for dict in w.agents
-        for (_,a) in dict
-            println(io,"  $a")
-        end
+    println(io, "$(typeof(w))")
+    for (_,a) in w.agents
+        println(io,"  $a")
     end
 end
