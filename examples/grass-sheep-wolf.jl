@@ -10,8 +10,8 @@ end
 
 function create_world()
     n_grass  = 1_000
-    n_sheep  = 20
-    n_wolves = 2
+    n_sheep  = 40
+    n_wolves = 4
 
     nextid = make_counter()
 
@@ -19,10 +19,6 @@ function create_world()
         [Grass(nextid()) for _ in 1:n_grass],
         [Sheep(nextid()) for _ in 1:n_sheep],
         [Wolf(nextid()) for _ in 1:n_wolves],
-        #[Sheep(nextid(),S=Male) for _ in 1:n_sheep],
-        #[Sheep(nextid(),S=Female) for _ in 1:n_sheep],
-        #[Wolf(nextid(),S=Female) for _ in 1:n_wolves],
-        #[Wolf(nextid(),S=Male) for _ in 1:n_wolves],
     ))
 end
 world = create_world();

@@ -1,14 +1,14 @@
 using Ecosystem
 
-s1 = Sheep(1,S=Male)
-s2 = Sheep(2,S=Female)
+s1 = Sheep(1,sex=:male)
+s2 = Sheep(2,sex=:female)
 w1 = Wolf(3)
 
 w = World([s1,s2,w1])
 display(w)
 
-@code_warntype Ecosystem.find_agent(Animal{Sheep,Female}, w)
-Ecosystem.find_agent(Animal{Sheep,Female}, w)
+@code_warntype Ecosystem.find_agent(Animal{Sheep}, w)
+Ecosystem.find_agent(Animal{Sheep}, w)
 
 @code_warntype Ecosystem.find_agent(Sheep, w)
 Ecosystem.find_agent(Sheep, w)

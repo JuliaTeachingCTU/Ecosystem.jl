@@ -14,8 +14,8 @@ end
 
 # get the per species defaults back
 randsex() = rand(Bool) ? :female : :male
-Sheep(id; E=4.0, ΔE=0.2, pr=0.5, pf=0.9, s=randsex()) = Sheep(id, E, ΔE, pr, pf, s)
-Wolf(id; E=10.0, ΔE=4.0, pr=0.1, pf=0.20, s=randsex()) = Wolf(id, E, ΔE, pr, pf, s)
+Sheep(id; E=4.0, ΔE=0.2, pr=0.5, pf=0.9, sex=randsex()) = Sheep(id, E, ΔE, pr, pf, sex)
+Wolf(id; E=10.0, ΔE=4.0, pr=0.1, pf=0.20, sex=randsex()) = Wolf(id, E, ΔE, pr, pf, sex)
 
 function Base.show(io::IO, a::Animal{A}) where A<:AnimalSpecies
     e = a.energy
