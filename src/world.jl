@@ -28,24 +28,24 @@ function flat(w::World)
 end
 
 function world_step!(world::World)
-    for (id, field) in shuffle(flat(world) |> collect)
-        species = getfield(world.agents, field)
-        !haskey(species, id) && continue
-        a = species[id]
-        agent_step!(a, world)
-    end
+    #for (id, field) in shuffle(flat(world) |> collect)
+    #    species = getfield(world.agents, field)
+    #    !haskey(species, id) && continue
+    #    a = species[id]
+    #    agent_step!(a, world)
+    #end
 
     # this is faster but incorrect because species of same gender are treated
     # one after another - which means that e.g. all Animal{Sheep,Female} will
     # eat before all Animal{Sheep,Male} leaving less food for the latter
-    # map(world.agents) do species
-    #     ids = copy(keys(species))
-    #     for id in ids
-    #         !haskey(species,id) && continue
-    #         a = species[id]
-    #         agent_step!(a, world)
-    #     end
-    # end
+    map(world.agents) do species
+        ids = copy(keys(species))
+        for id in ids
+            !haskey(species,id) && continue
+            a = species[id]
+            agent_step!(a, world)
+        end
+    end
 end
 
 function Base.show(io::IO, w::World)

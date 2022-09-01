@@ -10,15 +10,17 @@ end
 
 function create_world()
     n_grass  = 1_000
-    n_sheep  = 2
+    n_sheep  = 20
     n_wolves = 2
 
     nextid = make_counter()
 
     World(vcat(
         [Grass(nextid()) for _ in 1:n_grass],
-        [Sheep(nextid(),S=Male) for _ in 1:n_sheep],
-        [Sheep(nextid(),S=Female) for _ in 1:n_sheep],
+        [Sheep(nextid()) for _ in 1:n_sheep],
+        [Wolf(nextid()) for _ in 1:n_wolves],
+        #[Sheep(nextid(),S=Male) for _ in 1:n_sheep],
+        #[Sheep(nextid(),S=Female) for _ in 1:n_sheep],
         #[Wolf(nextid(),S=Female) for _ in 1:n_wolves],
         #[Wolf(nextid(),S=Male) for _ in 1:n_wolves],
     ))
@@ -34,10 +36,8 @@ for _ in 1:200
 end
 
 plt = plot()
-tolabel(::Type{Animal{Sheep,Female}}) = "Sheep ♀"
-tolabel(::Type{Animal{Sheep,Male}}) = "Sheep ♂"
-tolabel(::Type{Animal{Wolf,Female}}) = "Wolf ♀"
-tolabel(::Type{Animal{Wolf,Male}}) = "Wolf ♂"
+tolabel(::Type{Animal{Sheep}}) = "Sheep"
+tolabel(::Type{Animal{Wolf}}) = "Wolf"
 tolabel(::Type{Plant{Grass}}) = "Grass"
 for (A,c) in counts
     plot!(plt, c, label=tolabel(A), lw=2)

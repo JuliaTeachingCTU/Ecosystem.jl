@@ -19,10 +19,6 @@ abstract type AnimalSpecies <: Species end
 abstract type Sheep <: AnimalSpecies end
 abstract type Wolf <: AnimalSpecies end
 
-abstract type Sex end
-abstract type Male <: Sex end
-abstract type Female <: Sex end
-
 include("world.jl")
 include("plant.jl")
 include("animal.jl")
@@ -45,10 +41,8 @@ tosym(::T) where T<:Animal = tosym(T)
 
 # NOTE: needed for type stability
 # TODO: do this with meta programming
-tosym(::Type{Animal{Wolf,Female}}) = Symbol("WolfFemale")
-tosym(::Type{Animal{Wolf,Male}}) = Symbol("WolfMale")
-tosym(::Type{Animal{Sheep,Female}}) = Symbol("SheepFemale")
-tosym(::Type{Animal{Sheep,Male}}) = Symbol("SheepMale")
+tosym(::Type{Animal{Wolf}}) = Symbol("Wolf")
+tosym(::Type{Animal{Sheep}}) = Symbol("Sheep")
 tosym(::Type{Plant{Grass}}) = Symbol("Grass")
 
 end # module
