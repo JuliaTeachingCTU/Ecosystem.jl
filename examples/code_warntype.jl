@@ -10,9 +10,5 @@ display(w)
 @code_warntype Ecosystem.find_agent(Animal{Sheep}, w)
 Ecosystem.find_agent(Animal{Sheep}, w)
 
-error()
-@code_warntype Ecosystem.find_agent(Sheep, w)
-Ecosystem.find_agent(Sheep, w)
-
 @code_warntype find_food(w1, w)
 find_food(w1, w)
