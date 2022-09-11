@@ -144,7 +144,7 @@ class Wolf(Animal):
     def eats(self, a: Agent):
         return isinstance(a, Sheep)
 
-    def eat(self, a: Agent, w: World):
+    def eat(self, a: Agent | None, w: World):
         if a is None:
             return
         elif self.eats(a):
