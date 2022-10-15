@@ -83,6 +83,28 @@ function reproduce!(a::Animal{A,S}, w::World) where {A,S}
         nothing
     end
 end
+#function reproduce!(a::Animal{A,S}, w::World) where {A,S}
+#    m = find_mate(a,w)
+#    if !isnothing(m)
+#        E = (a.energy + m.energy)/3
+#        ΔE = a.Δenergy
+#        pr = a.reprprob
+#        pf = a.foodprob
+#        new_id = w.max_id + 1
+#        ŝ = Animal{A,S}(new_id, E, ΔE, pr, pf)
+#        # makes things type unstable but plots look better
+#        # ŝ = Animal{A,randsex()}(new_id, E, ΔE, pr, pf)
+#        getfield(w.agents, tosym(ŝ))[ŝ.id] = ŝ
+#
+#        a.energy = a.energy * 2/3
+#        m.energy = m.energy * 2/3
+#        w.max_id = new_id
+#        return ŝ
+#    else
+#        nothing
+#    end
+#end
+
 
 
 function agent_step!(a::Animal, w::World)

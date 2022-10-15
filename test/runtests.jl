@@ -49,8 +49,8 @@ using Test
     sheep2 = Sheep(2,2.0,1.0,1.0,1.0,Female)
     world = World([sheep1,sheep2])
     agent_step!(sheep1,world)
-    @test length(world.agents.sheep_female) == 1
-    @test length(world.agents.sheep_male) == 2
+    @test length(world.agents.SheepFemale) == 1
+    @test length(world.agents.SheepMale) == 2
     @test sheep1.energy == 0.5
 
     # check wolf eating sheep
@@ -59,19 +59,19 @@ using Test
     world = World([sheep,wolf])
     agent_step!(wolf, world)
     @test wolf.energy == 19.0
-    @test length(world.agents.sheep_male) == 0
-    @test length(world.agents.wolf_female) == 1
+    @test length(world.agents.SheepMale) == 0
+    @test length(world.agents.WolfFemale) == 1
 
     ss = [Sheep(1,5.0,2.0,1.0,1.0,Female),Sheep(2,5.0,2.0,1.0,1.0,Male)]
     world = World(ss)
     world_step!(world)
-    @test length(world.agents.sheep_female) == 2
-    @test length(world.agents.sheep_male) == 2
+    @test length(world.agents.SheepFemale) == 2
+    @test length(world.agents.SheepMale) == 2
     world_step!(world)
-    @test length(world.agents.sheep_female) == 4
-    @test length(world.agents.sheep_male) == 4
+    @test length(world.agents.SheepFemale) == 4
+    @test length(world.agents.SheepMale) == 4
     world_step!(world)
-    @test length(world.agents.sheep_female) == 0
-    @test length(world.agents.sheep_male) == 0
+    @test length(world.agents.SheepFemale) == 0
+    @test length(world.agents.SheepMale) == 0
 
 end

@@ -9,9 +9,9 @@ function make_counter()
 end
 
 function create_world()
-    n_grass  = 1_000
-    n_sheep  = 20
-    n_wolves = 2
+    n_grass  = 2_000
+    n_sheep  = 80
+    n_wolves = 4
 
     nextid = make_counter()
 
