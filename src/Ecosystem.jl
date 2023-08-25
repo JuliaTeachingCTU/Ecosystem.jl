@@ -1,6 +1,5 @@
 module Ecosystem
 
-using StatsBase
 using Random: shuffle
 
 export World
@@ -30,10 +29,9 @@ include("utils.jl")
 
 kill_agent!(a::Agent, w::World) = delete!(w.agents, a.id)
 
-function find_agent(::Type{A}, w::World) where A<:Agent
-    dict = filter(x -> isa(x,A), w.agents |> values |> collect)
-    as = dict |> values |> collect
-    isempty(as) ? nothing : sample(as)
+function find_agent(::Type{A}, w::World, predicate=x -> isa(x,A)) where A<:Agent
+    agents = Iterators.filter(predicate, w.agents |> values) |> collect
+    isempty(agents) ? nothing : rand(agents)
 end
 
 # for accessing NamedTuple in World

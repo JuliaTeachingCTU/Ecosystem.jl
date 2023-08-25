@@ -44,28 +44,22 @@ eat!(::Animal, ::Nothing, ::World) = nothing
 
 
 function find_agent(::Type{A}, w::World) where A<:AnimalSpecies
-    df = get(w.agents, tosym(Animal{A,Female}), Dict{Int,Animal{A,Female}}())
-    af = df |> values |> collect
+    af = find_agent(Animal{A,Female}, w)
+    am = find_agent(Animal{A,Male}, w)
 
-    dm = get(w.agents, tosym(Animal{A,Male}), Dict{Int,Animal{A,Male}}())
-    am = dm |> values |> collect
-
-    nf = length(af)
-    nm = length(am)
-    if nf == 0
-        # no females -> sample males
-        isempty(am) ? nothing : sample(am)
-    elseif nm == 0
-        # no males -> sample females
-        isempty(af) ? nothing : sample(af)
+    if isnothing(af) && isnothing(am)
+        nothing
+    elseif isnothing(af)
+        am
+    elseif isnothing(am)
+        af
     else
-        # both -> sample uniformly from one or the other
-        rand() < nm/(nf+nm) ? sample(am) : sample(af)
+        rand(Bool) ? af : am
     end
 end
 
-find_food(::Animal{<:Wolf}, w::World) = find_agent(Animal{Sheep}, w)
-find_food(::Animal{<:Sheep}, w::World) = find_agent(Plant{Grass}, w)
+find_food(::Animal{<:Wolf}, w::World) = find_agent(Sheep, w)
+find_food(::Animal{<:Sheep}, w::World) = find_agent(Grass, w)
 
 find_mate(::Animal{A,Female}, w::World) where A<:AnimalSpecies = find_agent(Animal{A,Male}, w)
 find_mate(::Animal{A,Male}, w::World) where A<:AnimalSpecies = find_agent(Animal{A,Female}, w)
@@ -75,15 +69,14 @@ function reproduce!(a::Animal{A,S}, w::World) where {A,S}
     if !isnothing(m)
         a.energy = a.energy / 2
         new_id = w.max_id + 1
-        ŝ = Animal{A,S}(new_id, a.energy, a.Δenergy, a.reprprob, a.foodprob)
-        w.agents[ŝ.id] = ŝ
+        ŝ = Animal{A,S}(new_id, a.energy, a.Δenergy, a.reprprob, a.foodprob)
+        w.agents[ŝ.id] = ŝ
         w.max_id = new_id
-        return ŝ
+        return ŝ
     else
         nothing
     end
 end
-
 
 function agent_step!(a::Animal, w::World)
     a.energy -= 1

@@ -9,9 +9,9 @@ function make_counter()
 end
 
 function create_world()
-    n_grass  = 1_000
-    n_sheep  = 20
-    n_wolves = 2
+    n_grass  = 2_000
+    n_sheep  = 80
+    n_wolves = 4
 
     nextid = make_counter()
 
@@ -49,6 +49,10 @@ end
 using BenchmarkTools
 N = 10
 world = create_world();
+
+sheep = Sheep(world.max_id+1)
+@btime find_food($sheep, $world)
+
 @btime simulate!($world, $N)
 
 #world = create_world();
