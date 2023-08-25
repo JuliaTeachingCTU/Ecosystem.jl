@@ -47,8 +47,8 @@ find_food(::Animal{<:Wolf}, w::World) = find_agent(Animal{Sheep}, w)
 find_food(::Animal{<:Sheep}, w::World) = find_agent(Plant{Grass}, w)
 
 function find_mate(a::Animal{A}, w::World) where A<:AnimalSpecies
-    as = filter(x -> isa(x,Animal{A}) && x.sex!=a.sex, w.agents |> values |> collect)
-    isempty(as) ? nothing : sample(as)
+    T = Animal{A}
+    find_agent(T, w, x -> isa(x,T) && x.sex!=a.sex)
 end
 
 function reproduce!(a::Animal{A}, w::World) where A
