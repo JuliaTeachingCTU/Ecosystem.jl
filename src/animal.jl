@@ -44,23 +44,17 @@ eat!(::Animal, ::Nothing, ::World) = nothing
 
 
 function find_agent(::Type{A}, w::World) where A<:AnimalSpecies
-    df = get(w.agents, tosym(Animal{A,Female}), Dict{Int,Animal{A,Female}}())
-    af = df |> values |> collect
+    af = find_agent(Animal{A,Female}, w)
+    am = find_agent(Animal{A,Male}, w)
 
-    dm = get(w.agents, tosym(Animal{A,Male}), Dict{Int,Animal{A,Male}}())
-    am = dm |> values |> collect
-
-    nf = length(af)
-    nm = length(am)
-    if nf == 0
-        # no females -> sample males
-        isempty(am) ? nothing : sample(am)
-    elseif nm == 0
-        # no males -> sample females
-        isempty(af) ? nothing : sample(af)
+    if isnothing(af) && isnothing(am)
+        nothing
+    elseif isnothing(af)
+        am
+    elseif isnothing(am)
+        af
     else
-        # both -> sample uniformly from one or the other
-        rand() < nm/(nf+nm) ? sample(am) : sample(af)
+        rand(Bool) ? af : am
     end
 end
 
@@ -76,35 +70,13 @@ function reproduce!(a::Animal{A,S}, w::World) where {A,S}
         a.energy = a.energy / 2
         new_id = w.max_id + 1
         ŝ = Animal{A,S}(new_id, a.energy, a.Δenergy, a.reprprob, a.foodprob)
-        getfield(w.agents, tosym(ŝ))[ŝ.id] = ŝ
+        w[tosym(ŝ)][ŝ.id] = ŝ
         w.max_id = new_id
         return ŝ
     else
         nothing
     end
 end
-#function reproduce!(a::Animal{A,S}, w::World) where {A,S}
-#    m = find_mate(a,w)
-#    if !isnothing(m)
-#        E = (a.energy + m.energy)/3
-#        ΔE = a.Δenergy
-#        pr = a.reprprob
-#        pf = a.foodprob
-#        new_id = w.max_id + 1
-#        ŝ = Animal{A,S}(new_id, E, ΔE, pr, pf)
-#        # makes things type unstable but plots look better
-#        # ŝ = Animal{A,randsex()}(new_id, E, ΔE, pr, pf)
-#        getfield(w.agents, tosym(ŝ))[ŝ.id] = ŝ
-#
-#        a.energy = a.energy * 2/3
-#        m.energy = m.energy * 2/3
-#        w.max_id = new_id
-#        return ŝ
-#    else
-#        nothing
-#    end
-#end
-
 
 
 function agent_step!(a::Animal, w::World)

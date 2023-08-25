@@ -54,7 +54,14 @@ end
 using BenchmarkTools
 N = 10
 world = create_world();
+
+@info "Benchmark find_food"
+sheep = Sheep(world.max_id+1)
+@btime find_food($sheep, $world)
+
+@info "Benchmark simulate"
 @btime simulate!($world, $N)
 
-#world = create_world();
-#@profview simulate!(world, N)
+using ProfileView
+world = create_world();
+@profview simulate!(world, N)
