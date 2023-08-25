@@ -50,6 +50,10 @@ end
 using BenchmarkTools
 N = 10
 world = create_world();
+
+sheep = Sheep(world.max_id+1)
+@btime find_food($sheep, $world)
+
 @btime simulate!($world, $N)
 
 #world = create_world();

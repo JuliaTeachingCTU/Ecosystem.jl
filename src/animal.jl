@@ -43,20 +43,14 @@ end
 eat!(::Animal, ::Nothing, ::World) = nothing
 
 
-function find_agent(::Type{A}, w::World) where A<:AnimalSpecies
-    d = get(w.agents, tosym(Animal{A}), Dict{Int,Animal{A}}())
-    as = d |> values |> collect
-    isempty(as) ? nothing : sample(as)
-end
-
+find_agent(::Type{A}, w::World) where A<:AnimalSpecies = find_agent(Animal{A}, w)
 find_food(::Animal{<:Wolf}, w::World) = find_agent(Sheep, w)
 find_food(::Animal{<:Sheep}, w::World) = find_agent(Grass, w)
 
 function find_mate(a::Animal{A}, w::World) where A<:AnimalSpecies
-    d = get(w.agents, tosym(Animal{A}), Dict{Int,Animal{A}}())
-    as = d |> values |> collect
-    as = filter(x -> x.sex != a.sex, as)
-    isempty(as) ? nothing : sample(as)
+    dict = w[tosym(a)]
+    agents = Iterators.filter(x -> x.sex != a.sex, values(dict)) |> collect
+    isempty(agents) ? nothing : rand(agents)
 end
 
 function reproduce!(a::Animal{A}, w::World) where A
@@ -65,7 +59,7 @@ function reproduce!(a::Animal{A}, w::World) where A
         a.energy = a.energy / 2
         new_id = w.max_id + 1
         ŝ = Animal{A}(new_id, a.energy, a.Δenergy, a.reprprob, a.foodprob, randsex())
-        getfield(w.agents, tosym(ŝ))[ŝ.id] = ŝ
+        w[tosym(ŝ)][ŝ.id] = ŝ
         w.max_id = new_id
         return ŝ
     else

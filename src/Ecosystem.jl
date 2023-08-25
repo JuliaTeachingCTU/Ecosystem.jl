@@ -1,6 +1,5 @@
 module Ecosystem
 
-using StatsBase
 using Random: shuffle
 
 export World
@@ -27,10 +26,10 @@ include("utils.jl")
 kill_agent!(a::Agent, w::World) = delete!(getfield(w.agents, tosym(typeof(a))), a.id)
 
 function find_agent(::Type{A}, w::World) where A<:Agent
-    dict = get(w.agents, tosym(A), nothing)
+    dict = w[tosym(A)]
     if !isnothing(dict)
         as = dict |> values |> collect
-        isempty(as) ? nothing : sample(as)
+        isempty(as) ? nothing : rand(as)
     else
         nothing
     end
