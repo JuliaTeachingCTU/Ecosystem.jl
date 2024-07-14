@@ -1,4 +1,4 @@
-module Ecosystem
+module ParametricSpeciesNTuple
 
 using Random: shuffle
 

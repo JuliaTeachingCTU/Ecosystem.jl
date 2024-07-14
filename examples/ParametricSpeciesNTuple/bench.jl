@@ -1,4 +1,4 @@
-using Ecosystem
+using Ecosystems.ParametricSpeciesNTuple
 using BenchmarkTools
 using Random
 Random.seed!(0)
