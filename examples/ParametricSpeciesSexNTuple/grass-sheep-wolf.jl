@@ -1,4 +1,4 @@
-using Ecosystem
+using Ecosystems.ParametricSpeciesSexNTuple
 using Random
 using Plots
 Random.seed!(4)

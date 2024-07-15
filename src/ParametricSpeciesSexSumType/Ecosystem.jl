@@ -2,6 +2,7 @@ module ParametricSpeciesSexSumType
 
 using Random: shuffle
 using DynamicSumTypes
+using IteratorSampling: itsample
 
 export World
 export Species, PlantSpecies, AnimalSpecies, Grass, Sheep, Wolf
@@ -56,8 +57,10 @@ kill_agent!(agent, w::World) = delete!(w.agents, agent.id)
 find_agent(a::Agent, w::World) = Agent(find_agent(typeof(variant(a)), w))
 
 function find_agent(::Type{A}, w::World, predicate=x -> isa(variant(x),A)) where A
-    agents = Iterators.filter(predicate, w.agents |> values) |> collect
-    isempty(agents) ? nothing : variant(rand(agents))
+    # agents = Iterators.filter(predicate, w.agents |> values) |> collect
+    # isempty(agents) ? nothing : variant(itsample(agents))
+    agents = Iterators.filter(predicate, w.agents |> values)
+    isempty(agents) ? nothing : variant(itsample(agents))
 end
 
 # for accessing NamedTuple in World

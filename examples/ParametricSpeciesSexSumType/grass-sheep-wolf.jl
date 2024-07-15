@@ -55,5 +55,5 @@ sheep = variant(Sheep(world.max_id+1))
 
 @btime simulate!($world, $N)
 
-#world = create_world();
-#@profview simulate!(world, N)
+world = create_world();
+@profview simulate!(world, N)

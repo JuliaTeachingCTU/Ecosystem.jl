@@ -5,10 +5,12 @@ version = "0.1.0"
 
 [deps]
 DynamicSumTypes = "5fcdbb90-de43-509e-b9a6-c4d43f29cf26"
+IteratorSampling = "ef79a3d2-ae9f-5cd2-ab61-e13847810a6e"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [compat]
 DynamicSumTypes = "3.3.1"
+IteratorSampling = "0.2.11"
 julia = "1"
 
 [extras]
