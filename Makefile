@@ -22,12 +22,12 @@ benchpkg:
 	fi
 	juliaup default 1.10
 	julia --project=benchmark -e 'using Pkg; Pkg.update(); Pkg.status(); using InteractiveUtils; versioninfo()'
-	~/.julia/bin/benchpkg -r main -s benchmark/benchmarks.jl -o benchmark/v1.10
+	~/.julia/bin/benchpkg -r dirty -s benchmark/benchmarks.jl -o benchmark/v1.10
 	juliaup default 1.11
 	julia --project=benchmark -e 'using Pkg; Pkg.update(); Pkg.status(); using InteractiveUtils; versioninfo()'
-	~/.julia/bin/benchpkg -r main -s benchmark/benchmarks.jl -o benchmark/v1.11
+	~/.julia/bin/benchpkg -r dirty -s benchmark/benchmarks.jl -o benchmark/v1.11
 
 benchpkgtable:
-	~/.julia/bin/benchpkgtable -i benchmark/v1.10 -r main > benchmark/v1.10.md
-	~/.julia/bin/benchpkgtable -i benchmark/v1.11 -r main > benchmark/v1.11.md
+	~/.julia/bin/benchpkgtable -i benchmark/v1.10 -r dirty > benchmark/v1.10.md
+	~/.julia/bin/benchpkgtable -i benchmark/v1.11 -r dirty > benchmark/v1.11.md
 	bash benchmark/benchmarktable.sh -n 44 benchmark/v1.10.md benchmark/v1.11.md
