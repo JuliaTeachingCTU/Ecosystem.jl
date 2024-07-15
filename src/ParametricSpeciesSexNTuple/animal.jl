@@ -7,8 +7,8 @@ mutable struct Animal{A<:AnimalSpecies,S<:Sex} <: Agent{A}
 end
 
 # AnimalSpecies constructors
-function (A::Type{<:AnimalSpecies})(id::Int,E::T,ΔE::T,pr::T,pf::T,S::Type{<:Sex}) where T
-    Animal{A,S}(id,E,ΔE,pr,pf)
+function (A::Type{<:AnimalSpecies})(id::Int, E::T, ΔE::T, pr::T, pf::T, S::Type{<:Sex}) where {T}
+    Animal{A,S}(id, E, ΔE, pr, pf)
 end
 
 # get the per species defaults back
@@ -26,15 +26,14 @@ end
 
 # note that for new species/sexes we will only have to overload `show` on the
 # abstract species/sex types like below!
-Base.show(io::IO, ::Type{Sheep}) = print(io,"🐑")
-Base.show(io::IO, ::Type{Wolf}) = print(io,"🐺")
-Base.show(io::IO, ::Type{Male}) = print(io,"♂")
-Base.show(io::IO, ::Type{Female}) = print(io,"♀")
-
+Base.show(io::IO, ::Type{Sheep}) = print(io, "🐑")
+Base.show(io::IO, ::Type{Wolf}) = print(io, "🐺")
+Base.show(io::IO, ::Type{Male}) = print(io, "♂")
+Base.show(io::IO, ::Type{Female}) = print(io, "♀")
 
 function eat!(wolf::Animal{Wolf}, sheep::Animal{Sheep}, w::World)
     wolf.energy += sheep.energy * wolf.Δenergy
-    kill_agent!(sheep,w)
+    kill_agent!(sheep, w)
 end
 function eat!(sheep::Animal{Sheep}, grass::Plant{Grass}, w::World)
     sheep.energy += grass.size * sheep.Δenergy
@@ -42,8 +41,7 @@ function eat!(sheep::Animal{Sheep}, grass::Plant{Grass}, w::World)
 end
 eat!(::Animal, ::Nothing, ::World) = nothing
 
-
-function find_agent(::Type{A}, w::World) where A<:AnimalSpecies
+function find_agent(::Type{A}, w::World) where {A<:AnimalSpecies}
     af = find_agent(Animal{A,Female}, w)
     am = find_agent(Animal{A,Male}, w)
 
@@ -61,11 +59,11 @@ end
 find_food(::Animal{<:Wolf}, w::World) = find_agent(Sheep, w)
 find_food(::Animal{<:Sheep}, w::World) = find_agent(Grass, w)
 
-find_mate(::Animal{A,Female}, w::World) where A<:AnimalSpecies = find_agent(Animal{A,Male}, w)
-find_mate(::Animal{A,Male}, w::World) where A<:AnimalSpecies = find_agent(Animal{A,Female}, w)
+find_mate(::Animal{A,Female}, w::World) where {A<:AnimalSpecies} = find_agent(Animal{A,Male}, w)
+find_mate(::Animal{A,Male}, w::World) where {A<:AnimalSpecies} = find_agent(Animal{A,Female}, w)
 
 function reproduce!(a::Animal{A,S}, w::World) where {A,S}
-    m = find_mate(a,w)
+    m = find_mate(a, w)
     if !isnothing(m)
         a.energy = a.energy / 2
         new_id = w.max_id + 1
@@ -78,19 +76,18 @@ function reproduce!(a::Animal{A,S}, w::World) where {A,S}
     end
 end
 
-
 function agent_step!(a::Animal, w::World)
     a.energy -= 1
     if rand() <= a.foodprob
-        dinner = find_food(a,w)
+        dinner = find_food(a, w)
         eat!(a, dinner, w)
     end
     if a.energy <= 0
-        kill_agent!(a,w)
-        return
+        kill_agent!(a, w)
+        return nothing
     end
     if rand() <= a.reprprob
-        reproduce!(a,w)
+        reproduce!(a, w)
     end
     return a
 end

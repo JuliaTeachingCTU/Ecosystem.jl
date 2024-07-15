@@ -29,13 +29,13 @@ include("utils.jl")
 
 kill_agent!(a::Agent, w::World) = delete!(w.agents, a.id)
 
-function find_agent(::Type{A}, w::World, predicate=x -> isa(x,A)) where A<:Agent
+function find_agent(::Type{A}, w::World, predicate=x -> isa(x, A)) where {A<:Agent}
     agents = Iterators.filter(predicate, w.agents |> values) |> collect
     isempty(agents) ? nothing : rand(agents)
 end
 
 # for accessing NamedTuple in World
-tosym(::T) where T<:Animal = tosym(T)
+tosym(::T) where {T<:Animal} = tosym(T)
 
 # NOTE: needed for type stability
 # TODO: do this with meta programming

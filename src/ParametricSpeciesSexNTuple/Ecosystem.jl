@@ -27,9 +27,9 @@ include("plant.jl")
 include("animal.jl")
 include("utils.jl")
 
-kill_agent!(a::A, w::World) where A<:Agent = delete!(w.agents[tosym(A)], a.id)
+kill_agent!(a::A, w::World) where {A<:Agent} = delete!(w.agents[tosym(A)], a.id)
 
-function find_agent(::Type{A}, w::World) where A<:Agent
+function find_agent(::Type{A}, w::World) where {A<:Agent}
     dict = w[tosym(A)]
     if !isnothing(dict)
         agents = dict |> values |> collect
@@ -40,7 +40,7 @@ function find_agent(::Type{A}, w::World) where A<:Agent
 end
 
 # for accessing NamedTuple in World
-tosym(::T) where T<:Animal = tosym(T)
+tosym(::T) where {T<:Animal} = tosym(T)
 
 # NOTE: needed for type stability
 # TODO: do this with meta programming

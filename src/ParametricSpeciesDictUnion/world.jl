@@ -36,7 +36,7 @@ function world_step!(world::World)
     # eat before all Animal{Sheep,Male} leaving less food for the latter
     ids = copy(keys(world.agents))
     for id in ids
-        !haskey(world.agents,id) && continue
+        !haskey(world.agents, id) && continue
         a = world.agents[id]
         agent_step!(a, world)
     end
@@ -44,7 +44,7 @@ end
 
 function Base.show(io::IO, w::World)
     println(io, "$(typeof(w))")
-    for (_,a) in w.agents
-        println(io,"  $a")
+    for (_, a) in w.agents
+        println(io, "  $a")
     end
 end

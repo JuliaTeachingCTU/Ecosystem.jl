@@ -25,7 +25,7 @@ include("utils.jl")
 
 kill_agent!(a::Agent, w::World) = delete!(getfield(w.agents, tosym(typeof(a))), a.id)
 
-function find_agent(::Type{A}, w::World) where A<:Agent
+function find_agent(::Type{A}, w::World) where {A<:Agent}
     dict = w[tosym(A)]
     if !isnothing(dict)
         as = dict |> values |> collect
@@ -36,7 +36,7 @@ function find_agent(::Type{A}, w::World) where A<:Agent
 end
 
 # for accessing NamedTuple in World
-tosym(::T) where T<:Animal = tosym(T)
+tosym(::T) where {T<:Animal} = tosym(T)
 
 # NOTE: needed for type stability
 # TODO: do this with meta programming

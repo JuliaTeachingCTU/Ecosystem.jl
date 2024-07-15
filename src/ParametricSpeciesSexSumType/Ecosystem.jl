@@ -38,14 +38,8 @@ mutable struct Plant{P<:PlantSpecies}
 end
 
 @sumtype Agent(
-    Animal{Wolf,Female},
-    Animal{Wolf,Male},
-    Animal{Sheep,Female},
-    Animal{Sheep,Male},
-    Plant{Grass}
+    Animal{Wolf,Female}, Animal{Wolf,Male}, Animal{Sheep,Female}, Animal{Sheep,Male}, Plant{Grass}
 ) <: AbstractAgent
-
-
 
 include("world.jl")
 include("plant.jl")
@@ -56,7 +50,7 @@ agent_step!(a::Agent, w::World) = agent_step!(variant(a), w)
 kill_agent!(agent, w::World) = delete!(w.agents, agent.id)
 find_agent(a::Agent, w::World) = Agent(find_agent(typeof(variant(a)), w))
 
-function find_agent(::Type{A}, w::World, predicate=x -> isa(variant(x),A)) where A
+function find_agent(::Type{A}, w::World, predicate=x -> isa(variant(x), A)) where {A}
     # agents = Iterators.filter(predicate, w.agents |> values) |> collect
     # isempty(agents) ? nothing : variant(itsample(agents))
     agents = Iterators.filter(predicate, w.agents |> values)
