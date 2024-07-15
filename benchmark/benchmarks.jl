@@ -1,13 +1,30 @@
 using BenchmarkTools
+using Pkg
+Pkg.status()
+Pkg.add("DynamicSumTypes")
+Pkg.update()
+using DynamicSumTypes
 using Ecosystems: ParametricSpeciesDictUnion as PSDU
 using Ecosystems: ParametricSpeciesSexDictUnion as PSSDU
 using Ecosystems: ParametricSpeciesSexNTuple as PSST
 using Ecosystems: ParametricSpeciesNTuple as PST
+using Ecosystems: ParametricSpeciesSexSumType as PSSDST
 using Random
 
 const SUITE = BenchmarkGroup()
 
 SUITE["ParametricSpeciesDictUnion"] = BenchmarkGroup()
+
+let
+    sheep = PSSDST.Sheep(1,1,1,1,1,PSSDST.Female)
+    vsheep = variant(sheep)
+    sheep2 = PSSDST.Sheep(3001,1,1,1,1,PSSDST.Male)
+    world = PSSDST.World(vcat([sheep,sheep2], [PSSDST.Grass(i) for i=2:3000]))
+    @info "Benching..." typeof(world) PSSDST.find_food(vsheep,world)
+    SUITE["ParametricSpeciesSexSumType"]["find_food"] = @benchmarkable PSSDST.find_food($vsheep, $world)
+    SUITE["ParametricSpeciesSexSumType"]["reproduce"] = @benchmarkable PSSDST.reproduce!($vsheep, $world)
+end
+
 
 let
     sheep = PSDU.Sheep(1,1,1,1,1,:female)
