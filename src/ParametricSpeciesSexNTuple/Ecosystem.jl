@@ -1,6 +1,7 @@
 module ParametricSpeciesSexNTuple
 
 using Random: shuffle
+using IteratorSampling: itsample
 
 export World
 export Species, PlantSpecies, AnimalSpecies, Grass, Sheep, Wolf
@@ -32,8 +33,8 @@ kill_agent!(a::A, w::World) where {A<:Agent} = delete!(w.agents[tosym(A)], a.id)
 function find_agent(::Type{A}, w::World) where {A<:Agent}
     dict = w[tosym(A)]
     if !isnothing(dict)
-        agents = dict |> values |> collect
-        isempty(agents) ? nothing : rand(agents)
+        agents = dict |> values
+        isempty(agents) ? nothing : itsample(agents)
     else
         nothing
     end
@@ -43,7 +44,6 @@ end
 tosym(::T) where {T<:Animal} = tosym(T)
 
 # NOTE: needed for type stability
-# TODO: do this with meta programming
 tosym(::Type{Animal{Wolf,Female}}) = Symbol("WolfFemale")
 tosym(::Type{Animal{Wolf,Male}}) = Symbol("WolfMale")
 tosym(::Type{Animal{Sheep,Female}}) = Symbol("SheepFemale")

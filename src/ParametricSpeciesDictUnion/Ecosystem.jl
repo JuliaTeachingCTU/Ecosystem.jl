@@ -1,6 +1,7 @@
 module ParametricSpeciesDictUnion
 
 using Random: shuffle, randperm
+using IteratorSampling: itsample
 
 export World
 export Species, PlantSpecies, AnimalSpecies, Grass, Sheep, Wolf
@@ -27,8 +28,8 @@ kill_agent!(a::Agent, w::World) = delete!(w.agents, a.id)
 
 function find_agent(::Type{A}, w::World, predicate=x -> isa(x, A)) where {A<:Agent}
     as = w.agents |> values
-    as = Iterators.filter(predicate, as) |> collect
-    isempty(as) ? nothing : rand(as)
+    as = Iterators.filter(predicate, as)
+    isempty(as) ? nothing : itsample(as)
 end
 
 # for accessing NamedTuple in World

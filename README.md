@@ -17,18 +17,18 @@ while not making the `World` type as complicated as it is with the named tuples.
 
 |                                         | v1.10              | v1.11              |
 |:----------------------------------------|:------------------:|:------------------:|
-| ParametricSpeciesDictUnion/find_food    | 0.215 ± 0.012 ms   | 0.215 ± 0.0064 ms  |
-| ParametricSpeciesDictUnion/reproduce    | 0.569 ± 0.36 ms    | 0.536 ± 0.38 ms    |
-| ParametricSpeciesSexDictUnion/find_food | 0.208 ± 0.012 ms   | 0.22 ± 0.0075 ms   |
-| ParametricSpeciesSexDictUnion/reproduce | 0.47 ± 0.26 ms     | 0.526 ± 0.3 ms     |
+| ParametricSpeciesDictUnion/find_food    | 0.242 ± 0.011 ms   | 0.215 ± 0.01 ms    |
+| ParametricSpeciesDictUnion/reproduce    | 0.562 ± 0.32 ms    | 0.568 ± 0.36 ms    |
+| ParametricSpeciesSexSumType/find_food   | 0.0502 ± 0.0084 ms | 0.0525 ± 0.0023 ms |
+| ParametricSpeciesSexSumType/reproduce   | 0.116 ± 0.078 ms   | 0.124 ± 0.081 ms   |
 |                                         |                    |                    |
-| ParametricSpeciesSexSumType/find_food   | 0.0669 ± 0.0085 ms | 0.0575 ± 0.0024 ms |
-| ParametricSpeciesSexSumType/reproduce   | 0.0907 ± 0.056 ms  | 0.0939 ± 0.057 ms  |
+| ParametricSpeciesSexDictUnion/find_food | 0.206 ± 0.011 ms   | 0.214 ± 0.0057 ms  |
+| ParametricSpeciesSexDictUnion/reproduce | 0.487 ± 0.28 ms    | 0.457 ± 0.29 ms    |
 |                                         |                    |                    |
-| ParametricSpeciesNTtuple/find_food      | 14.9 ± 2.8 μs      | 14.8 ± 4.3 μs      |
-| ParametricSpeciesNTtuple/reproduce      | 0.103 ± 0.1 ms     | 0.0924 ± 0.11 ms   |
-| ParametricSpeciesSexNTuple/find_food    | 12 ± 8.5 μs        | 15.5 ± 4.3 μs      |
-| ParametricSpeciesSexNTuple/reproduce    | 0.083 ± 0.041 μs   | 0.084 ± 0.042 μs   |
+| ParametricSpeciesNTtuple/find_food      | 2.75 ± 2.8 μs      | 2.79 ± 2.9 μs      |
+| ParametricSpeciesNTtuple/reproduce      | 0.103 ± 0.099 ms   | 0.0938 ± 0.1 ms    |
+| ParametricSpeciesSexNTuple/find_food    | 2.75 ± 2.8 μs      | 2.71 ± 2.8 μs      |
+| ParametricSpeciesSexNTuple/reproduce    | 0.042 ± 0.001 μs   | 0.042 ± 0.001 μs   |
 
 
 
